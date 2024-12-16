@@ -87,10 +87,18 @@ void PermissionHandlerWindowsPlugin::RegisterWithRegistrar(
 }
 
 PermissionHandlerWindowsPlugin::PermissionHandlerWindowsPlugin(){
-  m_positionChangedRevoker = geolocator.PositionChanged(winrt::auto_revoke,
-    [this](Geolocator const& geolocator, PositionChangedEventArgs e)
-    {
-    });
+//  m_positionChangedRevoker = geolocator.PositionChanged(winrt::auto_revoke,
+//    [this](Geolocator const& geolocator, PositionChangedEventArgs e)
+//    {
+//    });
+    try {
+        m_positionChangedRevoker = geolocator.PositionChanged(winrt::auto_revoke,
+          [this](Geolocator const& geolocator, PositionChangedEventArgs e)
+          {
+          });
+    } catch (...) {
+        /* Do nothing */
+    }
 }
 
 PermissionHandlerWindowsPlugin::~PermissionHandlerWindowsPlugin() = default;
@@ -187,7 +195,14 @@ winrt::fire_and_forget PermissionHandlerWindowsPlugin::IsBluetoothServiceEnabled
 
 void PermissionHandlerWindowsPluginRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar) {
-  PermissionHandlerWindowsPlugin::RegisterWithRegistrar(
-      PluginRegistrarManager::GetInstance()
-          ->GetRegistrar<PluginRegistrarWindows>(registrar));
+//  PermissionHandlerWindowsPlugin::RegisterWithRegistrar(
+//      PluginRegistrarManager::GetInstance()
+//          ->GetRegistrar<PluginRegistrarWindows>(registrar));
+    try {
+        PermissionHandlerWindowsPlugin::RegisterWithRegistrar(
+                PluginRegistrarManager::GetInstance()
+                        ->GetRegistrar<PluginRegistrarWindows>(registrar));
+    } catch (...) {
+        /* Do nothing */
+    }
 }
